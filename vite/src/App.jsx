@@ -1,8 +1,10 @@
-import { ethers } from "ethers";
-import { useState } from "react";
+import { Contract, ethers } from "ethers";
+import { useEffect, useState } from "react";
+import abi from "./abi.json";
 
 const App = () => {
   const [signer, setSigner] = useState();
+  const [contract, setContract] = useState();
 
   const onClickMetamask = async () => {
     try {
@@ -19,6 +21,16 @@ const App = () => {
   const onClickLogOut = () => {
     setSigner(null);
   };
+
+  useEffect(() => {
+    if (!signer) return;
+
+    setContract(
+      new Contract("0x77D2DAC005A952eF61AbC3D5b460bF60c805E790", abi, signer)
+    );
+  }, [signer]);
+
+  useEffect(() => console.log(contract), [contract]);
 
   return (
     <div className="bg-red-100 min-h-screen flex justify-center items-center">
